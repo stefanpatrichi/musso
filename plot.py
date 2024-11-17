@@ -11,41 +11,50 @@ def sym_to_arr(arr):
     return retval
 
 def musso_lim(a, b):
-    return b * sin(acos(a / b)) / acos(a/b)
+    return b * sin(acos(a / b)) / acos(a / b)
+
+def am(a, b):
+    return (a + b) / 2
+
+def gm(a, b):
+    return sqrt(a * b)
+
+def hm(a, b):
+    return 2 * a * b / (a + b)
 
 def musso_up_to(n, a, b):
     u = [a]
     v = [b]
     for i in range(n):
-        u.append((u[-1] + v[-1]) / 2)
-        v.append(sqrt(u[-1] * v[-1]))
-    return [Array(u), Array(v)]
+        u.append(am(u[-1], v[-1]))
+        v.append(gm(u[-1], v[-1]))
+    return [u, v]
 
 def agm_up_to(n, a, b):
     u = [b]
     v = [a]
     for i in range(n):
-        u.append((u[-1] + v[-1]) / 2)
-        v.append(sqrt(u[-2] * v[-1]))
-    return [Array(u), Array(v)]
+        u.append(am(u[-1], v[-1]))
+        v.append(gm(u[-2], v[-1]))
+    return [u, v]
 
 def diffs(n, u, v):
     d = []
     for i in range(n):
         d.append(Abs(v[i + 1] - u[i + 1]) / Abs(v[i] - u[i]))
-    return Array(d)
+    return d
 
 def conv_order(n, v, lim):
     p = []
     for i in range(n):
         p.append(log(Abs(v[i + 1] - lim)) / log(Abs(v[i] - lim)))
-    return Array(p)
+    return p
 
 def conv_rate(n, v, lim, ord):
-    p = []
+    mu = []
     for i in range(n):
-        p.append(Abs(v[i + 1] - lim) / Abs(v[i] - lim)**ord)
-    return Array(p)
+        mu.append(Abs(v[i + 1] - lim) / Abs(v[i] - lim)**ord)
+    return mu
 
 
 # ------------------------------------------------------
