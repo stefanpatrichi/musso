@@ -4,10 +4,6 @@ from decimal import *
 
 getcontext().prec = 30
 
-n = int(input())
-a = Decimal(input())
-b = Decimal(input())
-
 def musso_up_to(n, a, b):
     u = [a]
     v = [b]
@@ -24,7 +20,6 @@ def agm_up_to(n, a, b):
         v.append(Decimal(u[-2] * v[-1]).sqrt())
     return [u, v]
 
-u, v = agm_up_to(n, a, b)
 
 def diffs(n, u, v):
     d = []
@@ -32,10 +27,17 @@ def diffs(n, u, v):
         d.append((v[i] - u[i]) / (v[i - 1] - u[i - 1]))
     return d
 
-d = diffs(n - 1, u, v)
-print(d)
 
 # ------------------------------------------------------
+
+n = int(input())
+a = Decimal(input())
+b = Decimal(input())
+
+u, v = agm_up_to(n, a, b)
+
+d = diffs(n - 1, u, v)
+print(d)
 
 x = []
 for i in range(1, len(u) + 1):
@@ -43,4 +45,5 @@ for i in range(1, len(u) + 1):
 
 plt.plot(x, u, '-')
 plt.plot(x, v, '-')
+plt.legend()
 plt.show()
