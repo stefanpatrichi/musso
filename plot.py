@@ -11,7 +11,12 @@ def sym_to_arr(arr):
     return retval
 
 def musso_lim(a, b):
-    return b * sin(acos(a / b)) / acos(a / b)
+    alpha = acos(a / b)
+    return b * sin(alpha) / alpha
+
+def asm_lim(a, b):
+    alpha = acos(2 * a / b - 1)
+    return b * sin(alpha) / alpha
 
 def am(a, b):
     return (a + b) / 2
@@ -28,6 +33,14 @@ def musso_up_to(n, a, b):
     for i in range(n):
         u.append(am(u[-1], v[-1]))
         v.append(gm(u[-1], v[-1]))
+    return [u, v]
+
+def asm_up_to(n, a, b):
+    u = [a]
+    v = [b]
+    for i in range(n):
+        v.append(gm(u[-1], v[-1]))
+        u.append(am(u[-1], v[-1]))
     return [u, v]
 
 def agm_up_to(n, a, b):
@@ -66,20 +79,31 @@ b = sympify(input())
 if a > b:
     a, b = b, a
 
-_, v = musso_up_to(n, a, b)
+u, v     = musso_up_to(n, a, b)
+# up, vp   = asm_up_to(n, a, b)
+# u, v = agm_up_to(n, a, b)
+# print(sym_to_arr(up))
 # print(sym_to_arr(u))
 # d = diffs(n - 1, u, v)
 # p = conv_order(n - 2, v, v[n - 1])
 # print(v)
-r = conv_rate(n - 1, v, musso_lim(a, b), 1)
-print(sym_to_arr(r))
-# print(sym_to_arr(p))
+# r = conv_rate(n - 2, v, v[n - 1], 2)
+# print(sym_to_arr(r))
+print(sym_to_arr(test(n, v, musso_lim(a, b))))
+
+# for i in range(len(u)):
+#     print(N(u[i] + vp[i]) / 2)
+#     print(N(up[i] + v[i]) / 2)
 
 # x = []
-# for i in range(1, len(u) + 1):
+# for i in range(1, len(upp) + 1):
 #     x.append(i)
 
-# plt.plot(x, u, '-')
-# plt.plot(x, v, '-')
+# plt.plot(x, u, '-', label="APM u")
+# plt.plot(x, v, '-', label="APM v")
+# plt.plot(x, up, '-', label="ASM u")
+# plt.plot(x, vp, '-', label="ASM v")
+# plt.plot(x, upp, '-', label="AGM u")
+# plt.plot(x, vpp, '-', label="AGM v")
 # plt.legend()
 # plt.show()
