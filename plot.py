@@ -10,7 +10,7 @@ def sym_to_arr(arr):
         retval.append(N(x, PRECISION))
     return retval
 
-def musso_lim(a, b):
+def apm_lim(a, b):
     alpha = acos(a / b)
     return b * sin(alpha) / alpha
 
@@ -18,38 +18,52 @@ def asm_lim(a, b):
     alpha = acos(2 * a / b - 1)
     return b * sin(alpha) / alpha
 
-def am(a, b):
-    return (a + b) / 2
-
 def gm(a, b):
     return sqrt(a * b)
 
 def hm(a, b):
     return 2 * a * b / (a + b)
 
-def musso_up_to(n, a, b):
+def am(a, b):
+    return (a + b) / 2
+
+def qm(a, b):
+    return sqrt((a * a + b * b) / 2)
+
+def gaussian_iteration(n, mean1, mean2, a, b):
     u = [a]
     v = [b]
     for i in range(n):
-        u.append(am(u[-1], v[-1]))
-        v.append(gm(u[-1], v[-1]))
+        u.append(mean1(u[-1], v[-1]))
+        v.append(mean2(u[-2], v[-1]))
     return [u, v]
+
+def archimedean_iteration(n, mean1, mean2, a, b):
+    u = [a]
+    v = [b]
+    for i in range(n):
+        u.append(mean1(u[-1], v[-1]))
+        v.append(mean2(u[-1], v[-1]))
+    return [u, v]
+
+def apm_up_to(n, a, b):
+    if a > b:
+        a, b = b, a
+    return archimedean_iteration(n, am, gm, a, b)
 
 def asm_up_to(n, a, b):
-    u = [a]
-    v = [b]
-    for i in range(n):
-        v.append(gm(u[-1], v[-1]))
-        u.append(am(u[-1], v[-1]))
-    return [u, v]
+    if a > b:
+        a, b = b, a
+    return archimedean_iteration(n, gm, am, a, b)
 
 def agm_up_to(n, a, b):
-    u = [b]
-    v = [a]
-    for i in range(n):
-        u.append(am(u[-1], v[-1]))
-        v.append(gm(u[-2], v[-1]))
-    return [u, v]
+    return gaussian_iteration(n, am, gm, a, b)
+
+def ham_up_to(n, a, b):
+    return gaussian_iteration(n, hm, am, a, b)
+
+def gqm_up_to(n, a, b):
+    return gaussian_iteration(n, gm, qm, a, b)
 
 def diffs(n, u, v):
     d = []
@@ -69,7 +83,6 @@ def conv_rate(n, v, lim, ord):
         mu.append(Abs(v[i + 1] - lim) / Abs(v[i] - lim)**ord)
     return mu
 
-
 # ------------------------------------------------------
 
 n = int(input())
@@ -79,7 +92,9 @@ b = sympify(input())
 if a > b:
     a, b = b, a
 
-u, v     = musso_up_to(n, a, b)
+u, v = gqm_up_to(2, a, b)
+print(N(v[1]))
+print(N(am(a, b)))
 # up, vp   = asm_up_to(n, a, b)
 # u, v = agm_up_to(n, a, b)
 # print(sym_to_arr(up))
@@ -87,13 +102,7 @@ u, v     = musso_up_to(n, a, b)
 # d = diffs(n - 1, u, v)
 # p = conv_order(n - 2, v, v[n - 1])
 # print(v)
-# r = conv_rate(n - 2, v, v[n - 1], 2)
-# print(sym_to_arr(r))
-print(sym_to_arr(test(n, v, musso_lim(a, b))))
-
-# for i in range(len(u)):
-#     print(N(u[i] + vp[i]) / 2)
-#     print(N(up[i] + v[i]) / 2)
+# print(sym_to_arr(test(n, v, musso_lim(a, b))))
 
 # x = []
 # for i in range(1, len(upp) + 1):
