@@ -8,7 +8,7 @@ PRECISION = 50
 def sym_to_arr(arr):
     retval = []
     for x in arr:
-        retval.append(N(1/x, PRECISION))
+        retval.append(N(x, PRECISION))
     return retval
 
 def gm(a, b):
@@ -27,7 +27,7 @@ def qm(a, b):
 def apm_graph(a, x):
     retval = np.array([])
     for b in x:
-        print("a")
+        print(b)
         if a < b:
             retval = np.append(retval, sqrt(b**2 - a**2) / acos(a / b))
         elif a == b:
@@ -39,20 +39,20 @@ def apm_graph(a, x):
 def asm_graph(a, x):
     retval = np.array([])
     for b in x:
-        print("b")
+        print(b)
         if a < b:
             retval = np.append(retval, sqrt(a * (b - a)) / acos(sqrt(a / b)))
         elif a == b:
             retval = np.append(retval, a)
         else:
-            retval = np.append(retval, sqrt(b * (a - b)) / acosh(sqrt(a / b)))
+            retval = np.append(retval, sqrt(a * (a - b)) / acosh(sqrt(a / b)))
     return retval
 
 def agm_graph(a, x):
     retval = np.array([])
     t = Symbol('t')
     for b in x:
-        print("c")
+        print(b)
         retval = np.append(retval, pi / 2 * (integrate(1/sqrt(a**2 * cos(t)**2 + b**2 * sin(t)**2), (t, 0, pi / 2))) ** -1)
     return retval
 
@@ -131,10 +131,11 @@ a = sympify(input())
 b = sympify(input())
 
 # u, v     = asm_up_to(n, a, b)
-# up, vp   = asm_up_to(n, a, b)
+up, vp   = asm_up_to(n, a, b)
 # upp, vpp = agm_up_to(n, a, b)
-# print(sym_to_arr(u))
-# print(sym_to_arr(v))
+print(sym_to_arr(up))
+print(sym_to_arr(vp))
+
 # print(sym_to_arr(conv_rate2(n - 2, u, v, 1)))
 # print(sym_to_arr(conv_rate2(n - 2, up, vp, 1)))
 # print(sym_to_arr(conv_rate(n - 2, vpp, upp[n - 1], 2)))
@@ -157,16 +158,16 @@ b = sympify(input())
 # plt.legend()
 # plt.show()
 
-x = np.linspace(0.0, 2.5, 200)
+# x = np.linspace(0.0, 2.5, 200)
 # y1 = apm_graph(1, x)
 # y2 = agm_graph(1, x)
-y3 = asm_graph(1, x)
+# y3 = asm_graph(1, x)
 # y4 = am_graph(1, x)
 # y5 = gm_graph(1, x)
 # plt.plot(x, y1, label="APM")
 # plt.plot(x, y2, label="AGM")
-plt.plot(x, y3, label="ASM")
+# plt.plot(x, y3, label="ASM")
 # plt.plot(x, y4, label="AM")
 # plt.plot(x, y5, label="GM")
 # plt.legend()
-plt.show()
+# plt.show()
