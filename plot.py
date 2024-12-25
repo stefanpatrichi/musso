@@ -6,9 +6,9 @@ from sympy import *
 PRECISION = 50
 
 def sym_to_arr(arr):
-    retval = []
+    retval = np.array([])
     for x in arr:
-        retval.append(N(x, PRECISION))
+        retval = np.append(retval, (N(1/x, PRECISION)))
     return retval
 
 def gm(a, b):
@@ -92,7 +92,7 @@ def asm_up_to(n, a, b):
     return archimedean_iteration(n, gm, am, b, a)
 
 def agm_up_to(n, a, b):
-    return gaussian_iteration(n, gm, am, a, b)
+    return gaussian_iteration(n, am, gm, b, a)
 
 def ham_up_to(n, a, b):
     return gaussian_iteration(n, hm, am, a, b)
@@ -126,15 +126,16 @@ def conv_rate2(n, u, v, ord):
 
 # ------------------------------------------------------
 
-n = int(input())
-a = sympify(input())
-b = sympify(input())
+n = int(input("nr iteratii = "))
+a = sympify(input("a = "))
+b = sympify(input("b = "))
 
-# u, v     = asm_up_to(n, a, b)
+u, v     = apm_up_to(n, a, b)
 up, vp   = asm_up_to(n, a, b)
-# upp, vpp = agm_up_to(n, a, b)
-print(sym_to_arr(up))
-print(sym_to_arr(vp))
+upp, vpp = agm_up_to(n, a, b)
+# print("u_" + str(n) + " = " + str(N(1/u[-1])))
+# print("v_" + str(n) + " = " + str(N(1/v[-1])))
+# print(sym_to_arr(vp))
 
 # print(sym_to_arr(conv_rate2(n - 2, u, v, 1)))
 # print(sym_to_arr(conv_rate2(n - 2, up, vp, 1)))
@@ -144,19 +145,19 @@ print(sym_to_arr(vp))
 # print(v)
 # print(sym_to_arr(test(n, v, musso_lim(a, b))))
 
-# x = []
-# for i in range(0, len(u)):
-#     x.append(i)
+x = []
+for i in range(0, len(u)):
+    x.append(i)
 
-# plt.plot(x, u, '-', label="u")
-# plt.plot(x, v, '-', label="v")
-# plt.plot(x, up, '-', label="u'")
-# plt.plot(x, vp, '-', label="v'")
-# plt.plot(x, upp, '-', label="x")
-# plt.plot(x, vpp, '-', label="y")
-# plt.xlabel("n")
-# plt.legend()
-# plt.show()
+plt.plot(x, u, '-', label="u")
+plt.plot(x, v, '-', label="v")
+plt.plot(x, up, '-', label="u'")
+plt.plot(x, vp, '-', label="v'")
+plt.plot(x, upp, '-', label="x")
+plt.plot(x, vpp, '-', label="y")
+plt.xlabel("n")
+plt.legend()
+plt.show()
 
 # x = np.linspace(0.0, 2.5, 200)
 # y1 = apm_graph(1, x)
